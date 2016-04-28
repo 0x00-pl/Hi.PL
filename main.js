@@ -1,10 +1,26 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 
-class App extends Component {
+class Item extends Component {
     render() {
         return (
-                <h1>Hello world</h1>
+                <div>{this.props.name}</div>
+        )
+    }
+}
+
+class App extends Component {
+    render() {
+        let users = [
+            "pl1",
+            "pl2",
+            "pl0 0"
+        ]
+
+        return (
+            <div>
+                { users.map(n => <Item name={n} />) }
+            </div>
         )
     }
 }
