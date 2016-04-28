@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
+import {} from 'bootstrap/dist/css/bootstrap.css'
 
 class Item extends Component {
     render() {
         return (
-                <div>{this.props.name}</div>
+            <li className="list-group-item">
+                <button type="button" className="btn btn-info" onClick={this.props.clickHandle}>
+                  Close
+                </button>
+                {this.props.name}
+            </li>
         )
     }
 }
@@ -12,24 +18,36 @@ class Item extends Component {
 class App extends Component {
     constructor() {
         super()
-        this.state = { val: "" }
+        this.state = { val: "", datas: [] }
     }
     changeHandle(evt) {
         this.setState({ val: evt.target.value })
     }
+    keydownHandle(evt) {
+        if(evt.keyCode === 13)
+            this.setState({
+                datas: this.state.datas.concat(evt.target.value),
+                val: ""
+            })
+    }
+    deleteItem(idx) {
+        let datas = this.state.datas
+        let left = datas.slice(0, idx)
+        let right = datas.slice(idx + 1)
+        this.setState({
+            datas: [].concat(left).concat(right)
+        })
+    }
     render() {
-        let users = [
-            "pl1",
-            "pl2",
-            "pl0 0"
-        ]
-
         return (
-            <div>
-                { users.map(n => <Item name={n} />) }
-                <input type="text" onChange={this.changeHandle.bind(this)} />
+            <div className="container">
+                <input type="text" onChange={this.changeHandle.bind(this)} onKeyDown={this.keydownHandle.bind(this)} value={this.state.val} className="form-control" />
                 <div>{this.state.val}</div>
-
+                <ul className="list-group">
+                {this.state.datas.map(
+                    (n, idx) => <Item name={n} clickHandle={() => this.deleteItem.bind(this)(idx)} />
+                )}
+                </ul>
             </div>
         )
     }
