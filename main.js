@@ -10,6 +10,13 @@ class Item extends Component {
 }
 
 class App extends Component {
+    constructor() {
+        super()
+        this.state = { val: "" }
+    }
+    changeHandle(evt) {
+        this.setState({ val: evt.target.value })
+    }
     render() {
         let users = [
             "pl1",
@@ -20,6 +27,9 @@ class App extends Component {
         return (
             <div>
                 { users.map(n => <Item name={n} />) }
+                <input type="text" onChange={this.changeHandle.bind(this)} />
+                <div>{this.state.val}</div>
+
             </div>
         )
     }
