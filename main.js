@@ -2,18 +2,8 @@ import React, { Component } from 'react'
 import { render } from 'react-dom'
 import {} from 'bootstrap/dist/css/bootstrap.css'
 
-class Item extends Component {
-    render() {
-        return (
-            <li className="list-group-item">
-                <button type="button" className="btn btn-info" onClick={this.props.clickHandle}>
-                  Close
-                </button>
-                {this.props.name}
-            </li>
-        )
-    }
-}
+import TodosItem from './src/todos-item'
+
 
 class App extends Component {
     constructor() {
@@ -45,7 +35,7 @@ class App extends Component {
                 <div>{this.state.val}</div>
                 <ul className="list-group">
                 {this.state.datas.map(
-                    (n, idx) => <Item name={n} clickHandle={() => this.deleteItem.bind(this)(idx)} />
+                    (n, idx) => <TodosItem name={n} clickHandle={() => this.deleteItem.bind(this)(idx)} />
                 )}
                 </ul>
             </div>
