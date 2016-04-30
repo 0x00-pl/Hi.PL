@@ -3,6 +3,8 @@ import {} from 'bootstrap/dist/css/bootstrap.css'
 import {} from './app.css'
 
 import TodosItem from './components/todos-item'
+import TodosInput from './components/todos-input.js'
+import TodosMain from './components/todos-main.js'
 
 export default class App extends Component {
     constructor() {
@@ -12,13 +14,17 @@ export default class App extends Component {
     changeHandle(evt) {
         this.setState({ value: evt.target.value })
     }
+    addTodo(todo_text){
+        let item = {'name': todo_text, 'completed': false}
+        let task_list = this.state.task_list.concat(item)
+        this.setState({
+            'task_list': task_list
+        })
+    }
     keydownHandle(evt) {
         if(evt.keyCode === 13){
-            let item = {'name': evt.target.value, 'completed': false}
-            this.state.value = ''
-            let task_list = this.state.task_list.concat(item)
+            this.addTodo(evt.target.value)
             this.setState({
-                'task_list': task_list,
                 value: ''
             })
         }
@@ -59,37 +65,7 @@ export default class App extends Component {
     render() {
         return (
             <div className="container">
-                <input type="text"
-                 onChange={this.changeHandle.bind(this)}
-                 onKeyDown={this.keydownHandle.bind(this)}
-                 value={this.state.value}
-                 className="form-control"
-                />
-                <div>{this.state.value}</div>
-                <ul className="list-group">
-                {this.getShowingTaskList().map(
-                    (i, idx) =>
-                     <TodosItem name={i.name}
-                      completeHandle={() => this.changeCompleteState(idx) }
-                      clickHandle={() => this.deleteItem(idx)}
-                      completed={i.completed}
-                     />
-                )}
-                </ul>
-                <button type="button" className="btn btn-info"
-                 value="All"
-                 onClick={()=>this.setShowing("All")}>
-                    All
-                </button>
-                <button type="button" className="btn btn-info"
-                 value="Active"
-                 onClick={()=>this.setShowing("Active")}>
-                    Active
-                </button>
-                <button type="button" className="btn btn-info"
-                 onClick={()=>this.setShowing("Completed")}>
-                    Completed
-                </button>
+                <TodosMain />
             </div>
         )
     }
