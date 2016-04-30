@@ -8,7 +8,7 @@ import TodosItem from './src/todos-item'
 class App extends Component {
     constructor() {
         super()
-        this.state = { value: '', task_all: [], showing:'All', task_show:[] }
+        this.state = { value: '', task_list: [], showing:'All' }
     }
     changeHandle(evt) {
         this.setState({ value: evt.target.value })
@@ -17,46 +17,44 @@ class App extends Component {
         if(evt.keyCode === 13){
             let item = {'name': evt.target.value, 'completed': false}
             this.state.value = ''
-            let task_all = this.state.task_all.concat(item)
+            let task_list = this.state.task_list.concat(item)
             this.setState({
-                'task_all': task_all,
-                value: '',
-                task_show: this.getShowingTaskList(task_all, this.state.showing)
+                'task_list': task_list,
+                value: ''
             })
         }
     }
     deleteItem(idx) {
-        let datas = this.state.task_all
+        let datas = this.state.task_list
         let left = datas.slice(0, idx)
         let right = datas.slice(idx + 1)
-        let task_all = [].concat(left).concat(right)
+        let task_list = [].concat(left).concat(right)
         this.setState({
-            'task_all': task_all,
-            task_show: this.getShowingTaskList(task_all, this.state.showing)
+            'task_list': task_list
         })
     }
     changeCompleteState(idx) {
-        let task = this.state.task_all[idx]
-        let task_all = this.state.task_all
-        task_all[idx].completed = !task_all[idx].completed
+        let task = this.state.task_list[idx]
+        let task_list = this.state.task_list
+        task_list[idx].completed = !task_list[idx].completed
         this.setState({
-            'task_all': task_all,
-            task_show: this.getShowingTaskList(task_all, this.state.showing)
+            'task_list': task_list
         })
     }
-    getShowingTaskList(task_all, showing){
+    getShowingTaskList(){
+        let task_list = this.state.task_list
+        let showing = this.state.showing
         if(showing === 'Active'){
-            return task_all.filter((i)=>!i.completed)
+            return task_list.filter((i)=>!i.completed)
         }else if(showing === 'Completed'){
-            return task_all.filter((i)=>i.completed)
+            return task_list.filter((i)=>i.completed)
         }else{
-            return task_all.slice(0)
+            return task_list.slice(0)
         }
     }
     setShowing(showing){
         this.setState({
-            'showing': showing,
-            task_show: this.getShowingTaskList(this.state.task_all, showing)
+            'showing': showing
         })
     }
     render() {
@@ -70,7 +68,7 @@ class App extends Component {
                 />
                 <div>{this.state.value}</div>
                 <ul className="list-group">
-                {this.state.task_show.map(
+                {this.getShowingTaskList().map(
                     (i, idx) =>
                      <TodosItem name={i.name}
                       completeHandle={() => this.changeCompleteState(idx) }
