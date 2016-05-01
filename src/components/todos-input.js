@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {} from 'bootstrap/dist/css/bootstrap.css'
 
 export default class TodosInput extends Component{
     constructor(){
@@ -19,19 +20,21 @@ export default class TodosInput extends Component{
     }
     render(){
         return(
-            <div className="container">
-            <input type="text" clasName="form-control"
-            onChange={this.changeHandle.bind(this)}
-            onKeyDown={this.keydownHandle.bind(this)}
-            value={this.state.value}
-            />
-            <button type="button" className="btn btn-info"
-                onClick={this.commit.bind(this)}>
-                +
-            </button>
-            
-            <div>{this.state.value}</div>
-            </div>
+                <div className="input-group">
+                    <input type="text" clasName="form-control"
+                    onChange={this.changeHandle.bind(this)}
+                    onKeyDown={this.keydownHandle.bind(this)}
+                    value={this.state.value}
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" className="btn btn-secondary"
+                         onClick={this.commit.bind(this)}>
+                            +
+                        </button>
+                    </span>
+                    
+                    <div>{this.state.value}</div>
+                </div>
         )
     }
 }

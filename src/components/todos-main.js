@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {} from 'bootstrap/dist/css/bootstrap.css'
 
 import TodosInput from './todos-input'
 import TodosItem from './todos-item'
@@ -12,7 +13,7 @@ let showing = {
 class Info extends Component {
     render() {
         return (
-            <div className="todos-info">
+            <div className="label label-default">
             <span>{this.props.num}</span>
             {this.props.children}
             </div>
@@ -63,39 +64,44 @@ export default class TodosMain extends Component {
     }
     render(){
         return (
-            <div className="container">
-                <button type="button" className="btn btn-info"
-                 value="All"
-                 onClick={()=>this.setShowing(showing.All)}>
-                    All
-                </button>
-                <button type="button" className="btn btn-info"
-                 value="Active"
-                 onClick={()=>this.setShowing(showing.Active)}>
-                    Active
-                </button>
-                <button type="button" className="btn btn-info"
-                 onClick={()=>this.setShowing(showing.Completed)}>
-                    Completed
-                </button>
-                
-                <TodosInput commitHandle={this.addTodo.bind(this)} />
-                
-                {this.showingTodo(this.state.showing).map((i, idx) =>
-                    <TodosItem
-                    content={i.content}
-                    completed={i.completed}
-                    completeHandle={()=>this.completeTodo(idx)}
-                    closeHandle={()=>this.removeTodo(idx)}
-                    />
-                )}
-                
-                
-                <section className="footer-left">
-                    <Info num={this.showingTodo(showing.All).length}>个待办事项</Info>
-                    <Info num={this.showingTodo(showing.Completed).length}>已完成</Info>
-                    <Info num={this.showingTodo(showing.Active).length}>未完成</Info>
-                </section>
+            <div className="container col-md-12">
+                <div className="col-md-3 col-md-offset-5">
+                    <button type="button" className="btn btn-info"
+                    value="All"
+                    onClick={()=>this.setShowing(showing.All)}>
+                        All
+                    </button>
+                    <button type="button" className="btn btn-info"
+                    value="Active"
+                    onClick={()=>this.setShowing(showing.Active)}>
+                        Active
+                    </button>
+                    <button type="button" className="btn btn-info"
+                    onClick={()=>this.setShowing(showing.Completed)}>
+                        Completed
+                    </button>
+                    
+                    <ul className="list-group">
+                    
+                        <TodosInput commitHandle={this.addTodo.bind(this)} />
+                    
+                        {this.showingTodo(this.state.showing).map((i, idx) =>
+                            <TodosItem
+                            content={i.content}
+                            completed={i.completed}
+                            completeHandle={()=>this.completeTodo(idx)}
+                            closeHandle={()=>this.removeTodo(idx)}
+                            />
+                        )}
+                    </ul>
+                    
+                    
+                    <section className="row">
+                        <Info num={this.showingTodo(showing.All).length}>个待办事项</Info>
+                        <Info num={this.showingTodo(showing.Completed).length}>已完成</Info>
+                        <Info num={this.showingTodo(showing.Active).length}>未完成</Info>
+                    </section>
+                </div>
             </div>
         )
     }
