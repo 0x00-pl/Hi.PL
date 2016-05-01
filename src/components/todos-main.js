@@ -78,17 +78,29 @@ export default class TodosMain extends Component {
                 return todos
         }
     }
+    completeSelected(){
+        let todos = this.state.todos.map(function(i){
+            if(i.selected){
+                return Object.assign({}, i, {completed:true})
+            }else{
+                return i
+            }
+        })
+        this.setState({todos: todos})
+    }
+    closeSelected(){
+        let todos = this.state.todos.filter((i) => !i.selected)
+        this.setState({todos: todos})
+    }
     render(){
         return (
             <div className="container col-md-12">
                 <div className="col-md-3 col-md-offset-5">
                     <button type="button" className="btn btn-info"
-                    value="All"
                     onClick={()=>this.setShowing(showing.All)}>
                         All
                     </button>
                     <button type="button" className="btn btn-info"
-                    value="Active"
                     onClick={()=>this.setShowing(showing.Active)}>
                         Active
                     </button>
@@ -116,6 +128,15 @@ export default class TodosMain extends Component {
                         )}
                     </ul>
                     
+                    
+                    <button type="button" className="btn btn-info"
+                    onClick={this.completeSelected.bind(this)}>
+                        Complete Selected
+                    </button>
+                    <button type="button" className="btn btn-info"
+                    onClick={this.closeSelected.bind(this)}>
+                        Close Selected
+                    </button>
                     
                     <section className="row">
                         <Info num={this.showingTodo(showing.All).length}>个待办事项</Info>
