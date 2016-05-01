@@ -18,13 +18,22 @@ export default class TodosInput extends Component{
             this.commit()
         }
     }
+    onSelectChange(evt){
+        console.log(evt.target)
+        console.log(evt.target.checked)
+        this.props.onSelectChangeHandle(evt.target.checked)
+    }
     render(){
         return(
                 <div className="input-group">
+                    <input type="checkbox"
+                     checked={this.props.selectedAll}
+                     onChange={this.onSelectChange.bind(this)} 
+                    />
                     <input type="text" clasName="form-control"
-                    onChange={this.changeHandle.bind(this)}
-                    onKeyDown={this.keydownHandle.bind(this)}
-                    value={this.state.value}
+                     onChange={this.changeHandle.bind(this)}
+                     onKeyDown={this.keydownHandle.bind(this)}
+                     value={this.state.value}
                     />
                     <span class="input-group-btn">
                         <button type="button" className="btn btn-secondary"

@@ -24,23 +24,39 @@ class Info extends Component {
 export default class TodosMain extends Component {
     constructor(){
         super()
-        this.state = {todos:[], showing:showing.All}
+        this.state = {todos:[], showing:showing.All, selectedAll:false}
     }
     addTodo(todo_text){
         let new_idx = this.state.todos.length
-        let item = {content:todo_text, completed:false}
+        let item = {content:todo_text, completed:false, selected:false}
         let todos = this.state.todos.concat(item)
         this.setState({
             'todos': todos
         })
     }
-    completeTodo(idx){
+    updateTodoIdx(idx, fupdate){
         let todos = this.state.todos
         let l = todos.slice(0, idx)
         let r = todos.slice(idx+1)
         let completed = todos[idx].completed
-        let current = Object.assign({}, todos[idx], {completed:!completed})
-        this.setState({todos: l.concat(current).concat(r)})
+        let current = fupdate(todos[idx])
+        return l.concat(current).concat(r)
+    }
+    completeTodo(idx){
+        this.setState(
+            this.updateTodoIdx(idx, (i) =>  Object.assign({}, i, {completed:!i.completed}))
+        )
+    }
+    setSelect(idx, b){
+        let todos = this.updateTodoIdx(idx, (i) => Object.assign({}, i, {selected:b}))
+        let selectedAll = Array.every(todos, (i) => i.selected)
+        this.setState({todos:todos, selectedAll:selectedAll})
+    }
+    setSelectAll(b){
+        let todos = this.state.todos.map(
+                (i) => Object.assign({}, i, {selected:b})
+            )
+        this.setState({todos: todos, selectedAll:b})
     }
     removeTodo(idx){
         let todos = this.state.todos
@@ -82,8 +98,11 @@ export default class TodosMain extends Component {
                     </button>
                     
                     <ul className="list-group">
-                    
-                        <TodosInput commitHandle={this.addTodo.bind(this)} />
+                        <TodosInput
+                         commitHandle={this.addTodo.bind(this)} 
+                         selectedAll={this.state.selectedAll}
+                         onSelectChangeHandle={this.setSelectAll.bind(this)} 
+                         />
                     
                         {this.showingTodo(this.state.showing).map((i, idx) =>
                             <TodosItem
@@ -91,6 +110,8 @@ export default class TodosMain extends Component {
                             completed={i.completed}
                             completeHandle={()=>this.completeTodo(idx)}
                             closeHandle={()=>this.removeTodo(idx)}
+                            selected={i.selected}
+                            onSelectChangeHandle={(b)=>this.setSelect(idx, b)}
                             />
                         )}
                     </ul>
