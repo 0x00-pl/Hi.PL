@@ -21,6 +21,51 @@ class Info extends Component {
     }
 }
 
+class Counter extends Component {
+    showingTodoCount(s){
+        let todos = this.props.todos
+        switch (s) {
+            case showing.Active:
+                return todos.reduce((sum, i) => i.completed? sum: sum+1, 0)
+            case showing.Completed:
+                return todos.reduce((sum, i) => i.completed? sum+1: sum, 0)
+            default:
+                return todos.length
+        }
+    }
+    render(){
+        return (
+            <section className="row">
+                <Info num={this.showingTodoCount(showing.All)}>个待办事项</Info>
+                <Info num={this.showingTodoCount(showing.Completed)}>已完成</Info>
+                <Info num={this.showingTodoCount(showing.Active)}>未完成</Info>
+            </section>
+        )
+    }
+}
+
+class SetShowing extends Component {
+    render(){
+        let setShowing = this.props.setShowingHandle
+        return (
+            <div className="row">
+                <button type="button" className="btn btn-info"
+                onClick={()=>setShowing(showing.All)}>
+                    All
+                </button>
+                <button type="button" className="btn btn-info"
+                onClick={()=>setShowing(showing.Active)}>
+                    Active
+                </button>
+                <button type="button" className="btn btn-info"
+                onClick={()=>setShowing(showing.Completed)}>
+                    Completed
+                </button>
+            </div>
+        )
+    }
+}
+
 export default class TodosMain extends Component {
     constructor(){
         super()
@@ -96,18 +141,8 @@ export default class TodosMain extends Component {
         return (
             <div className="container col-md-12">
                 <div className="col-md-3 col-md-offset-5">
-                    <button type="button" className="btn btn-info"
-                    onClick={()=>this.setShowing(showing.All)}>
-                        All
-                    </button>
-                    <button type="button" className="btn btn-info"
-                    onClick={()=>this.setShowing(showing.Active)}>
-                        Active
-                    </button>
-                    <button type="button" className="btn btn-info"
-                    onClick={()=>this.setShowing(showing.Completed)}>
-                        Completed
-                    </button>
+                
+                    <SetShowing setShowingHandle={this.setShowing.bind(this)} />
                     
                     <ul className="list-group">
                         <TodosInput
@@ -138,11 +173,7 @@ export default class TodosMain extends Component {
                         Close Selected
                     </button>
                     
-                    <section className="row">
-                        <Info num={this.showingTodo(showing.All).length}>个待办事项</Info>
-                        <Info num={this.showingTodo(showing.Completed).length}>已完成</Info>
-                        <Info num={this.showingTodo(showing.Active).length}>未完成</Info>
-                    </section>
+                    <Counter todos={this.state.todos}/>
                 </div>
             </div>
         )
